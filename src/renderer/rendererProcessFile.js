@@ -1,24 +1,46 @@
-const { readFile, writeFile } = window.electronAPI.require(
-  "../shared/fileOperations"
-);
+const { readFile, writeFile, readOneBit, readNBits, writeOneBit } =
+  window.electronAPI.require("../shared/fileOperations");
 
-document.getElementById("readButton").addEventListener("click", () => {
-  readFile("input.txt", (err, data) => {
-    if (err) {
-      console.error("Error reading the file:", err);
-      return;
-    }
-    document.getElementById("output").innerText = `File content: \n${data}`;
-  });
+const output = document.getElementById("output");
+
+document.getElementById("readButton").addEventListener("click", async () => {
+  // readOneBit("C:\\Personal\\input.txt")
+  //   .then((bit) => {
+  //     console.log("Read bit:", bit);
+  //   })
+  //   .catch((err) => {
+  //     console.error("Error:", err);
+  //   });
+
+  readNBits("C:\\Personal\\1900b0aE.dag", 12)
+    .then((bits) => {
+      console.log("Read bits:", bits);
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+    });
 });
 
-document.getElementById("writeButton").addEventListener("click", () => {
-  const contentToWrite = "This is the content to write to the file.";
-  writeFile("output.txt", contentToWrite, (err) => {
-    if (err) {
-      console.error("Error writing to the file:", err);
-      return;
-    }
-    console.log("File has been written successfully.");
-  });
+document.getElementById("writeButton").addEventListener("click", async () => {
+  let bit;
+  readOneBit("C:\\Personal\\input.txt")
+    .then((b) => {
+      bit = b;
+      writeOneBit("C:\\Personal\\output.txt", bit);
+    })
+    .then(() => {
+      console.log("Wrote bit:", bit);
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+    });
 });
+
+function readText(file, offset, callback) {
+  const reader = new FileReader();
+  const blob = file.slice(offset);
+  reader.onload = function (e) {
+    callback(e.target.result);
+  };
+  reader.readAsText(blob);
+}

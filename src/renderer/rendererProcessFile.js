@@ -1,24 +1,29 @@
-const { readFile, writeFile, readOneBit, readNBits, writeOneBit } =
-  window.electronAPI.require("../shared/fileOperations");
+const {
+  writeFile,
+  readOneBit,
+  readNBits,
+  writeOneBit,
+  readOneByte,
+  createFileStatistic,
+  returnHuffmanTree,
+  generateHuffmanCodes,
+  writeCodifiedFile,
+  writeHeader,
+} = window.electronAPI.require("../shared/fileOperations");
 
 const output = document.getElementById("output");
+let filePath = "";
 
 document.getElementById("readButton").addEventListener("click", async () => {
-  // readOneBit("C:\\Personal\\input.txt")
-  //   .then((bit) => {
-  //     console.log("Read bit:", bit);
-  //   })
-  //   .catch((err) => {
-  //     console.error("Error:", err);
-  //   });
-
-  readNBits("C:\\Personal\\1900b0aE.dag", 12)
-    .then((bits) => {
-      console.log("Read bits:", bits);
-    })
-    .catch((err) => {
-      console.error("Error:", err);
-    });
+  console.log(filePath);
+  await createFileStatistic(filePath);
+  const huffmanTree = returnHuffmanTree();
+  const codes = generateHuffmanCodes(huffmanTree[0]);
+  try {
+    await writeCodifiedFile(`C:\\Personal\\test2.txt`, codes);
+  } catch (err) {
+    console.error("Error:", err);
+  }
 });
 
 document.getElementById("writeButton").addEventListener("click", async () => {
@@ -36,11 +41,7 @@ document.getElementById("writeButton").addEventListener("click", async () => {
     });
 });
 
-function readText(file, offset, callback) {
-  const reader = new FileReader();
-  const blob = file.slice(offset);
-  reader.onload = function (e) {
-    callback(e.target.result);
-  };
-  reader.readAsText(blob);
-}
+document.querySelector("#fileInput").addEventListener("change", (event) => {
+  console.log("File input changed:", event.target.files[0].path);
+  filePath = event.target.files[0].path;
+});

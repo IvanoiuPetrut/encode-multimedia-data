@@ -1,7 +1,120 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --text: #f9f2fd;
+  --background: #030104;
+  --primary: #641256;
+  --secondary: #340917;
+  --accent: #da2f68;
+  --gradient: linear-gradient(
+    90deg,
+    rgb(100, 18, 86) 0% rgb(218, 47, 104) 100%
+  );
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+  background-color: var(--background);
+  color: var(--text);
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 3.2rem;
+  margin-top: 1.2rem;
+  text-align: center;
+}
+
+strong {
+  background: linear-gradient(120deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.custom-file-input {
+  position: relative;
+  width: 200px;
+  height: 40px;
+  overflow: hidden;
+}
+
+.hidden-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.custom-button {
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-size: 1.2rem;
+  background-color: var(--accent);
+  border-radius: 0.5rem;
+  text-align: center;
+  line-height: 40px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.selected-file {
+  position: absolute;
+  top: calc(100% - 60px);
+  left: 0;
+  width: 100%;
+  height: 60px;
+  border-top: 3px dashed var(--text);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  background: linear-gradient(120deg, var(--primary), var(--accent));
+}
+
+.btn {
+  background-color: var(--primary);
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  text-transform: uppercase;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+  transform: translateY(-0.2rem);
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }

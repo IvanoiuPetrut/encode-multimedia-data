@@ -6,9 +6,25 @@
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <input id="fileInput" type="file" />
-    <button id="readButton">Read File 📖</button>
-    <button id="writeButton">Write File 📝</button>
+    <h1>Mare <strong>encryptare</strong> 🔐</h1>
+    <main>
+      <div class="custom-file-input">
+        <input
+          type="file"
+          id="fileInput"
+          name="fileInput"
+          class="hidden-input"
+        />
+        <label for="fileInput" class="custom-button">Choose a File</label>
+      </div>
+
+      <p class="selected-file">No selected file</p>
+
+      <div class="btn-group">
+        <button id="encryptButton" class="btn">Encrypt file</button>
+        <button id="decryptButton" class="btn">Decrypt file</button>
+      </div>
+    </main>
     <div id="output"></div>
 
     <script src="../renderer/rendererProcessFile.js"></script>

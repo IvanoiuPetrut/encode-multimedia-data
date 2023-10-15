@@ -12,9 +12,14 @@ const {
 } = window.electronAPI.require("../shared/fileOperations");
 
 const output = document.getElementById("output");
+const selectedFileEl = document.querySelector(".selected-file");
 let filePath = "";
 
-document.getElementById("readButton").addEventListener("click", async () => {
+document.querySelector("#encryptButton").addEventListener("click", async () => {
+  if (!filePath) {
+    console.log("No file selected");
+    return;
+  }
   console.log(filePath);
   await createFileStatistic(filePath);
   const huffmanTree = returnHuffmanTree();
@@ -26,22 +31,7 @@ document.getElementById("readButton").addEventListener("click", async () => {
   }
 });
 
-document.getElementById("writeButton").addEventListener("click", async () => {
-  let bit;
-  readOneBit("C:\\Personal\\input.txt")
-    .then((b) => {
-      bit = b;
-      writeOneBit("C:\\Personal\\output.txt", bit);
-    })
-    .then(() => {
-      console.log("Wrote bit:", bit);
-    })
-    .catch((err) => {
-      console.error("Error:", err);
-    });
-});
-
 document.querySelector("#fileInput").addEventListener("change", (event) => {
-  console.log("File input changed:", event.target.files[0].path);
   filePath = event.target.files[0].path;
+  selectedFileEl.innerHTML = filePath;
 });

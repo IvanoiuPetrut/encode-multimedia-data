@@ -1,7 +1,45 @@
+const fs = require("fs").promises;
+const { readFileAsBytes } = require("./fileOperations");
+
 let file = null;
 let bufferReader = Buffer.alloc(1);
 let numberOfAvailableBitReads = 0;
 let byteOffset = 0;
+
+const bufferOne = [];
+
+function getCode(codes, char) {
+  const index = codes.findIndex((element) => element.char === char);
+  return codes[index].code;
+}
+
+function decimalToBinary(decimal) {
+  return (decimal >>> 0).toString(2);
+}
+
+function writeByte(filePath, buffer) {
+  const bufferToWrite = Buffer.from(buffer);
+  console.log("Write byte:", bufferToWrite);
+  fs.appendFile(filePath, bufferToWrite);
+  bufferOne.length = 0; // clear buffer
+}
+
+async function writeOneByte(filePathRead, filePathWrite, codes) {
+  const file = await readFileAsBytes(filePathRead);
+  console.log(file);
+  for (let i = 0; i < file.length; i++) {
+    const byte = file[i];
+    const code = getCode(codes, byte);
+    for (let j = 0; j < code.length; j++) {
+      const bit = code[j];
+      bufferOne.push(bit);
+      if (bufferOne.length === 8) {
+        writeByte(filePathWrite, bufferOne);
+        bufferOne.length = 0; // clear buffer
+      }
+    }
+  }
+}
 
 function isBufferReaderEmpty() {
   return numberOfAvailableBitReads === 0;
@@ -46,15 +84,6 @@ async function readOneByte(filePath) {
   return byte;
 }
 
-async function writeOneBit(filePath, bit) {
-  try {
-    await fs.writeFile(filePath, bit, { encoding: null });
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
-}
-
 function extractBitFromLeft(byte, bitPosition) {
   const bit = (byte >> bitPosition) & 1;
   return bit;
@@ -64,5 +93,6 @@ module.exports = {
   readOneBit,
   readNBits,
   readOneByte,
-  writeOneBit,
+  writeOneByte,
+  decimalToBinary,
 };

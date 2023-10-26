@@ -7,23 +7,13 @@ async function readFileAsBytes(filePath) {
   return buffer;
 }
 
-function writeFile(filePath, content, callback) {
-  fs.writeFile(filePath, content, (err) => {
-    if (err) {
-      callback(err);
-      return;
-    }
-    callback(null);
-  });
-}
-
 // * filePath, file, huffmanCodes
-async function writeCodifiedFile(filePath, huffmanCodes) {
-  const huffmanCodesJSON = JSON.stringify(huffmanCodes);
-  let fullCode = `<header>${huffmanCodesJSON}</header>
+async function writeCodifiedFile(filePath, codes, file) {
+  const codesJSON = JSON.stringify(codes);
+  let fullCode = `<header>${codesJSON}</header>
   `;
   for (let i = 0; i < file.length; i++) {
-    const code = huffmanCodes[file[i]];
+    const code = codes[file[i]];
     fullCode += code;
   }
   fs.writeFile(filePath, fullCode, { encoding: null });
@@ -31,6 +21,5 @@ async function writeCodifiedFile(filePath, huffmanCodes) {
 
 module.exports = {
   readFileAsBytes,
-  writeFile,
   writeCodifiedFile,
 };

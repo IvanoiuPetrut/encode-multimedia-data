@@ -9,9 +9,7 @@ class Node {
 
 function buildHuffmanTree(frequencyVector) {
   const nodes = frequencyVector.map((el, index) => new Node(index, el));
-
-  console.log("Nodes:", nodes);
-
+  console.log(nodes);
   while (nodes.length > 1) {
     nodes.sort((a, b) => a.frequency - b.frequency);
     const left = nodes.shift();

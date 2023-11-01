@@ -19,7 +19,6 @@ function decimalToBinary(decimal) {
 
 function writeByte(filePath, buffer) {
   const bufferToWrite = Buffer.from(buffer);
-  console.log("Write byte:", bufferToWrite);
   fs.appendFile(filePath, bufferToWrite);
   bufferOne.length = 0; // clear buffer
 }
@@ -45,6 +44,19 @@ function isBufferReaderEmpty() {
   return numberOfAvailableBitReads === 0;
 }
 
+async function readOneByte(filePath) {
+  if (!file) {
+    file = await readFileAsBytes(filePath);
+    console.log("Read file:", file);
+  }
+  console.log("Read file:", file);
+  const byte = file[byteOffset];
+  // console.log("Read byte:", byte);
+  byteOffset++;
+  numberOfAvailableBitReads = 7;
+  return byte;
+}
+
 async function readOneBit(filePath) {
   try {
     if (isBufferReaderEmpty()) {
@@ -55,6 +67,7 @@ async function readOneBit(filePath) {
       console.log("Reached end of file.");
       return null;
     }
+    // console.log("Buffer reader:", bufferReader);
     const bit = extractBitFromLeft(bufferReader, bitPosition);
     numberOfAvailableBitReads--;
     return bit;
@@ -70,23 +83,28 @@ async function readNBits(filePath, numberOfBits) {
     const bit = await readOneBit(filePath);
     bits.push(bit);
   }
+  // console.log("Read bits:", bits);
   return bits;
-}
-
-async function readOneByte(filePath) {
-  if (!file) {
-    file = await readFileAsBytes(filePath);
-  }
-  const byte = file[byteOffset];
-  console.log("Read byte:", byte);
-  byteOffset++;
-  numberOfAvailableBitReads = 7;
-  return byte;
 }
 
 function extractBitFromLeft(byte, bitPosition) {
   const bit = (byte >> bitPosition) & 1;
   return bit;
+}
+
+let buffer = [];
+function writeNBits(filePath, bits, numberOfBits) {
+  bits = new Array(numberOfBits - bits.length).fill(0).concat(bits);
+  console.log("bits: ", bits);
+  for (let i = 0; i < numberOfBits; i++) {
+    buffer.push(bits[i]);
+    if (buffer.length === 8) {
+      const writeBuffer = Buffer.from(buffer);
+      // console.log("writeBuffer for file: ", writeBuffer);
+      fs.appendFile(filePath, writeBuffer);
+      buffer.length = 0; // clear buffer
+    }
+  }
 }
 
 module.exports = {
@@ -95,4 +113,6 @@ module.exports = {
   readOneByte,
   writeOneByte,
   decimalToBinary,
+  writeByte,
+  writeNBits,
 };

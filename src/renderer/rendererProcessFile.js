@@ -1,6 +1,5 @@
-const { createFileStatistic } = window.electronAPI.require(
-  "../shared/fileStatistics"
-);
+const { createFileStatistic, writeStatisticsToFile, getFileStatistic } =
+  window.electronAPI.require("../shared/fileStatistics");
 
 const { buildHuffmanTree, generateHuffmanCodes } =
   window.electronAPI.require("../shared/huffman");
@@ -32,9 +31,10 @@ encryptButton.addEventListener("click", async () => {
   try {
     const fileStatistic = await createFileStatistic(filePath);
     console.log(fileStatistic);
-    const codes = shannonFanoCoding(fileStatistic);
-    console.log("Codes: ", codes);
-    await writeOneByte(filePath, "C:\\Personal\\test2.txt", codes);
+    await writeStatisticsToFile("D:\\test2", fileStatistic);
+    // const codes = shannonFanoCoding(fileStatistic);
+    // console.log("Codes: ", codes);
+    // await writeOneByte(filePath, "C:\\test2.txt", codes);
   } catch (err) {
     console.error("Error:", err);
   }
@@ -46,9 +46,9 @@ decryptButton.addEventListener("click", async () => {
   //   return;
   // }
   try {
-    // const fileStatistic = await getFileStatistic(filePath);
-    // console.log(fileStatistic);
-    console.log(decimalToBinary(2));
+    const fileStatistic = await getFileStatistic(filePath);
+    console.log(fileStatistic);
+    // console.log(decimalToBinary(2));
     // const codes = shannonFanoCoding(fileStatistic);
     // console.log("Codes: ", codes);
     // await writeOneByte(filePath, "C:\\Personal\\test2.txt", codes);

@@ -38,11 +38,12 @@ async function writeStatisticsToFile(filePath, statistics) {
 async function getFileStatistic(filePath) {
   let fileStatistic = Array.from({ length: 256 }, () => 0);
   const file = await readFileAsBytes(filePath);
-  for (let i = 0; i < 256; i++) {
-    const entryBinary = await readNBits(filePath, STATISTIC_ENTRY_SIZE);
-    const entry = parseInt(entryBinary, 2);
-    fileStatistic[i] = entry;
-  }
+  console.log(file);
+  // for (let i = 0; i < 256; i++) {
+  //   const entryBinary = await readNBits(filePath, STATISTIC_ENTRY_SIZE);
+  //   const entry = parseInt(entryBinary, 2);
+  //   fileStatistic[i] = entry;
+  // }
   return fileStatistic;
 }
 

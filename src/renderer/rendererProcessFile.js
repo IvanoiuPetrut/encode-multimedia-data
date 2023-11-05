@@ -12,9 +12,8 @@ const { shannonFanoCoding, assignCodesToTree } = window.electronAPI.require(
   "../shared/shannonFano"
 );
 
-const { writeOneByte, decimalToBinary } = window.electronAPI.require(
-  "../shared/bitOperations"
-);
+const { writeOneByte, decimalToBinary, writeNBits } =
+  window.electronAPI.require("../shared/bitOperations");
 
 const selectedFile = document.querySelector(".selected-file"),
   encryptButton = document.querySelector("#encryptButton"),
@@ -24,13 +23,17 @@ const selectedFile = document.querySelector(".selected-file"),
 let filePath = "";
 
 encryptButton.addEventListener("click", async () => {
-  if (!filePath) {
-    console.log("No file selected");
-    return;
-  }
+  // if (!filePath) {
+  //   console.log("No file selected");
+  //   return;
+  // }
   try {
     const fileStatistic = await createFileStatistic(filePath);
-    console.log(fileStatistic);
+    console.log("fileStats: ", fileStatistic);
+
+    // const bits = [1, 1, 1, 1, 0, 0, 0, 0];
+    // writeNBits("D:\\test2", bits, 8);
+
     await writeStatisticsToFile("D:\\test2", fileStatistic);
     // const codes = shannonFanoCoding(fileStatistic);
     // console.log("Codes: ", codes);

@@ -99,10 +99,11 @@ function writeNBits(filePath, bits, numberOfBits) {
   for (let i = 0; i < numberOfBits; i++) {
     buffer.push(bits[i]);
     if (buffer.length === 8) {
-      const writeBuffer = Buffer.from(buffer);
-      // console.log("writeBuffer for file: ", writeBuffer);
+      const writeBuffer = Buffer.alloc(1);
+      writeBuffer.writeUInt8(parseInt(buffer.join(""), 2));
+      console.log("writeBuffer for file: ", writeBuffer);
       fs.appendFile(filePath, writeBuffer);
-      buffer.length = 0; // clear buffer
+      buffer.length = 0;
     }
   }
 }

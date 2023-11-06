@@ -29,7 +29,6 @@ function shannonFanoCoding(frequencyVector) {
   nodes = nodes.filter((node) => node.frequency !== 0); // remove zero frequencies
   nodes.sort((a, b) => a.frequency - b.frequency);
   const codes = [];
-  console.log("Nodes:", nodes);
 
   function traverse(nodes, code = "") {
     if (nodes.length === 1) {

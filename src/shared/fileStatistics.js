@@ -1,10 +1,5 @@
 const { readFileAsBytes } = require("./fileOperations");
-const {
-  writeByte,
-  decimalToBinary,
-  writeNBits,
-  readNBits,
-} = require("./bitOperations");
+const { decimalToBinary, writeNBits, readNBits } = require("./bitOperations");
 
 const STATISTIC_ENTRY_SIZE = 32;
 
@@ -19,18 +14,9 @@ async function createFileStatistic(filePath) {
 
 async function writeStatisticsToFile(filePath, statistics) {
   let writeBuffer = [];
-  statistics.forEach((entry, index) => {
+  statistics.forEach((entry) => {
     const entryBinary = decimalToBinary(entry);
-    const entryLength = entryBinary.length;
-    // console.log(
-    //   index,
-    //   ": ",
-    //   entry,
-    //   " -> ",
-    //   entryBinary + " (" + entryLength + ")"
-    // );
     writeBuffer = entryBinary.split("");
-    console.log("writeBuffer: ", writeBuffer);
     writeNBits(filePath, writeBuffer, STATISTIC_ENTRY_SIZE);
   });
 }
@@ -38,12 +24,13 @@ async function writeStatisticsToFile(filePath, statistics) {
 async function getFileStatistic(filePath) {
   let fileStatistic = Array.from({ length: 256 }, () => 0);
   const file = await readFileAsBytes(filePath);
-  console.log(file);
-  // for (let i = 0; i < 256; i++) {
-  //   const entryBinary = await readNBits(filePath, STATISTIC_ENTRY_SIZE);
-  //   const entry = parseInt(entryBinary, 2);
-  //   fileStatistic[i] = entry;
-  // }
+  console.log("Fisier citit: ", file);
+  for (let i = 0; i < 256; i++) {
+    const entryBinary = await readNBits(filePath, STATISTIC_ENTRY_SIZE);
+    console.log("Entry binary: ", entryBinary);
+    const entry = parseInt(entryBinary, 2);
+    fileStatistic[i] = entry;
+  }
   return fileStatistic;
 }
 

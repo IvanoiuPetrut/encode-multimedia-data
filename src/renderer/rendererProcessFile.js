@@ -1,19 +1,13 @@
 const { createFileStatistic, writeStatisticsToFile, getFileStatistic } =
   window.electronAPI.require("../shared/fileStatistics");
 
-const { buildHuffmanTree, generateHuffmanCodes } =
-  window.electronAPI.require("../shared/huffman");
-
-const { writeCodifiedFile } = window.electronAPI.require(
-  "../shared/fileOperations"
-);
-
-const { shannonFanoCoding, assignCodesToTree } = window.electronAPI.require(
+const { shannonFanoCoding } = window.electronAPI.require(
   "../shared/shannonFano"
 );
 
-const { writeOneByte, decimalToBinary, writeNBits } =
-  window.electronAPI.require("../shared/bitOperations");
+const { writeShanonCodes } = window.electronAPI.require(
+  "../shared/bitOperations"
+);
 
 const selectedFile = document.querySelector(".selected-file"),
   encryptButton = document.querySelector("#encryptButton"),
@@ -23,21 +17,16 @@ const selectedFile = document.querySelector(".selected-file"),
 let filePath = "";
 
 encryptButton.addEventListener("click", async () => {
-  // if (!filePath) {
-  //   console.log("No file selected");
-  //   return;
-  // }
+  if (!filePath) {
+    console.log("No file selected");
+    return;
+  }
   try {
     const fileStatistic = await createFileStatistic(filePath);
-    console.log("fileStats: ", fileStatistic);
-
-    // const bits = [1, 1, 1, 1, 0, 0, 0, 0];
-    // writeNBits("D:\\test2", bits, 8);
-
-    await writeStatisticsToFile("D:\\test2", fileStatistic);
-    // const codes = shannonFanoCoding(fileStatistic);
-    // console.log("Codes: ", codes);
-    // await writeOneByte(filePath, "C:\\test2.txt", codes);
+    console.log(fileStatistic);
+    await writeStatisticsToFile("C:\\Personal\\encoded-file", fileStatistic);
+    const codes = shannonFanoCoding(fileStatistic);
+    await writeShanonCodes(filePath, "C:\\Personal\\encoded-file", codes);
   } catch (err) {
     console.error("Error:", err);
   }
@@ -51,11 +40,6 @@ decryptButton.addEventListener("click", async () => {
   try {
     const fileStatistic = await getFileStatistic(filePath);
     console.log(fileStatistic);
-    // console.log(decimalToBinary(2));
-    // const codes = shannonFanoCoding(fileStatistic);
-    // console.log("Codes: ", codes);
-    // await writeOneByte(filePath, "C:\\Personal\\test2.txt", codes);
-    // await writeCodifiedFile(`C:\\Personal\\test2.txt`, codes);
   } catch (err) {
     console.error("Error:", err);
   }

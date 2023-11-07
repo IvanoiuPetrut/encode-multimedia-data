@@ -1,6 +1,7 @@
 const { readFileAsBytes } = require("./fileOperations");
-const { decimalToBinary, writeNBits } = require("./bitOperations");
+const { decimalToBinary } = require("./bitOperations");
 const { openFileReader, readNBits } = require("./bitReader");
+const { writeNBits } = require("./bitWritter");
 
 const STATISTIC_ENTRY_SIZE = 32;
 
@@ -15,18 +16,10 @@ async function createFileStatistic(filePath) {
 
 async function writeStatisticsToFile(filePath, statistics) {
   let writeBuffer = [];
-  statistics.forEach(async (entry, index) => {
+  statistics.forEach((entry) => {
     const entryBinary = decimalToBinary(entry);
-    // console.log(
-    //   "index: ",
-    //   index,
-    //   "entry: ",
-    //   entry,
-    //   "entryBinary: ",
-    //   entryBinary
-    // );
     writeBuffer = entryBinary.split("");
-    await writeNBits(filePath, writeBuffer, STATISTIC_ENTRY_SIZE);
+    writeNBits(filePath, writeBuffer, STATISTIC_ENTRY_SIZE);
   });
 }
 

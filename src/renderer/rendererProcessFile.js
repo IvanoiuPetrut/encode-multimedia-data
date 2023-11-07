@@ -9,9 +9,12 @@ const { writeShanonCodes } = window.electronAPI.require(
   "../shared/bitOperations"
 );
 
+const { writeNBits } = window.electronAPI.require("../shared/bitWritter.js");
+
 const selectedFile = document.querySelector(".selected-file"),
   encryptButton = document.querySelector("#encryptButton"),
   decryptButton = document.querySelector("#decryptButton"),
+  testButton = document.querySelector("#testButton"),
   fileInput = document.querySelector("#fileInput");
 
 let filePath = "";
@@ -25,8 +28,8 @@ encryptButton.addEventListener("click", async () => {
     const fileStatistic = await createFileStatistic(filePath);
     console.log(fileStatistic);
     await writeStatisticsToFile("C:\\Personal\\encoded-file", fileStatistic);
-    const codes = shannonFanoCoding(fileStatistic);
-    await writeShanonCodes(filePath, "C:\\Personal\\encoded-file", codes);
+    // const codes = shannonFanoCoding(fileStatistic);
+    // await writeShanonCodes(filePath, "C:\\Personal\\encoded-file", codes);
   } catch (err) {
     console.error("Error:", err);
   }
@@ -48,4 +51,18 @@ decryptButton.addEventListener("click", async () => {
 fileInput.addEventListener("change", (event) => {
   filePath = event.target.files[0].path;
   selectedFile.innerHTML = filePath;
+});
+
+testButton.addEventListener("click", () => {
+  const length = 32;
+  const bits1 = [1, 1, 1, 1, 1, 1, 1, 1];
+  const bits2 = [0, 1, 0, 1, 1, 0, 0, 0];
+
+  for (let i = 0; i < 50; i++) {
+    if (i % 2 === 0) {
+      writeNBits("C:\\Personal\\test1", bits1, length);
+    } else {
+      writeNBits("C:\\Personal\\test1", bits2, length);
+    }
+  }
 });

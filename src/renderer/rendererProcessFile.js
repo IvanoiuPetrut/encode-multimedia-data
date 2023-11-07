@@ -25,10 +25,12 @@ encryptButton.addEventListener("click", async () => {
     return;
   }
   try {
+    const fileName = Date.now().toString();
     const fileStatistic = await createFileStatistic(filePath);
     console.log(fileStatistic);
-    await writeStatisticsToFile("C:\\Personal\\encoded-file", fileStatistic);
-    // const codes = shannonFanoCoding(fileStatistic);
+    await writeStatisticsToFile(`C:\\Personal\\${fileName}`, fileStatistic);
+    const codes = shannonFanoCoding(fileStatistic);
+    console.log(codes);
     // await writeShanonCodes(filePath, "C:\\Personal\\encoded-file", codes);
   } catch (err) {
     console.error("Error:", err);
@@ -43,6 +45,8 @@ decryptButton.addEventListener("click", async () => {
   try {
     const fileStatistic = await getFileStatistic(filePath);
     console.log(fileStatistic);
+    const codes = shannonFanoCoding(fileStatistic);
+    console.log(codes);
   } catch (err) {
     console.error("Error:", err);
   }

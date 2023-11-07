@@ -30,10 +30,6 @@ async function getFileStatistic(filePath) {
     const entryBinaryArray = await readNBits(STATISTIC_ENTRY_SIZE);
     const entryBinary = entryBinaryArray.join("");
     const entry = parseInt(entryBinary, 2);
-    console.log("index: ", i);
-    console.log("Entry binary: ", entryBinary);
-    console.log("Entry parsed: ", entry);
-    console.log();
     fileStatistic[i] = entry;
   }
   return fileStatistic;

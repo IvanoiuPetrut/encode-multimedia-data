@@ -11,7 +11,6 @@ function isBufferReaderEmpty() {
 
 async function openFileReader(filePath) {
   file = await readFileAsBytes(filePath);
-  console.log(file);
 }
 
 function readByte() {
@@ -35,7 +34,6 @@ function readNBits(numberOfBits) {
     bits.push(bit);
     numberOfAvailableBitReads--;
   }
-  console.log("bits from read n bits: ", bits);
   return bits;
 }
 

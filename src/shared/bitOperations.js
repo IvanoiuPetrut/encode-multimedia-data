@@ -40,8 +40,11 @@ function extractBitFromLeft(byte, bitPosition) {
 }
 
 let buffer = [];
-function writeNBits(filePath, bits, numberOfBits) {
+// let index = 0;
+async function writeNBits(filePath, bits, numberOfBits) {
   bits = new Array(numberOfBits - bits.length).fill(0).concat(bits);
+  // console.log("index: ", index, "bits: ", bits);
+  // index++;
   for (let i = 0; i < numberOfBits; i++) {
     buffer.push(bits[i]);
     if (buffer.length === 8) {
@@ -53,9 +56,18 @@ function writeNBits(filePath, bits, numberOfBits) {
   }
 }
 
+function byteToBits(byteValue) {
+  if (byteValue < 0 || byteValue > 255 || !Number.isInteger(byteValue)) {
+    throw new Error("Input must be an integer between 0 and 255.");
+  }
+
+  return byteValue.toString(2).padStart(8, "0");
+}
+
 module.exports = {
   writeShanonCodes,
   decimalToBinary,
   writeByte,
   writeNBits,
+  byteToBits,
 };

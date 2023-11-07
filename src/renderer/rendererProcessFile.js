@@ -33,10 +33,10 @@ encryptButton.addEventListener("click", async () => {
 });
 
 decryptButton.addEventListener("click", async () => {
-  // if (!filePath) {
-  //   console.log("No file selected");
-  //   return;
-  // }
+  if (!filePath) {
+    console.log("No file selected");
+    return;
+  }
   try {
     const fileStatistic = await getFileStatistic(filePath);
     console.log(fileStatistic);

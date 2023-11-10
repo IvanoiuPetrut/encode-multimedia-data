@@ -60,35 +60,45 @@ function getCode(codes, char) {
 
 async function writeShanonFile(filePathRead, filePathWrite, codes) {
   await openFileReader(filePathRead);
-
-  // for (let i = 0; i < 32; i++) {
-  //   const byte = await readNBits(32);
-  // }
-
-  console.log("File read.");
-
   let byte = await readNBits(8);
   byte = bitsToByte(byte);
-  console.log(byte);
   while (byte.length !== 0) {
     const code = getCode(codes, byte);
-    // console.log(code, code.length);
     writeNBits(filePathWrite, code.split(""), code.length);
     byte = await readNBits(8);
     byte = bitsToByte(byte);
-    // console.log(byte);
   }
   writeNBits(filePathWrite, [0, 0, 0, 0, 0, 0, 0], 7);
-  // for (let i = 0; i < file.length; i++) {
-  //   const byte = file[i];
-  //   const code = getCode(codes, byte);
-  //   writeNBits(filePathWrite, code.split(""), code.length);
-  // }
-  // writeNBits(filePathWrite, [0, 0, 0, 0, 0, 0, 0], 7);
   console.log("File written.");
+}
+
+function getByteFromCode(codes, code) {
+  const index = codes.findIndex((element) => element.code === code);
+  return index === -1 ? null : codes[index].char;
+}
+
+async function decodeShannonFile(filePathRead, filePathWrite, codes) {
+  await openFileReader(filePathRead);
+  let bit = await readNBits(1);
+  let readBuffer = [];
+
+  while (bit.length !== 0) {
+    readBuffer.push(bit[0]);
+    console.log("Read buffer: ", readBuffer);
+    const byte = getByteFromCode(codes, readBuffer.join(""));
+    console.log("Byte decoded: ", byte);
+    if (byte !== null) {
+      const bits = byteToBits(byte).split("");
+      console.log("Bits decoded: ", bits);
+      writeNBits(filePathWrite, bits, bits.length);
+      readBuffer = [];
+    }
+    bit = await readNBits(1);
+  }
 }
 
 module.exports = {
   shannonFanoCoding,
   writeShanonFile,
+  decodeShannonFile,
 };

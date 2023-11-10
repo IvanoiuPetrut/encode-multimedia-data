@@ -3,6 +3,7 @@ const { byteToBits } = require("./bitOperations");
 
 let byteOffset = 0;
 let numberOfAvailableBitReads = 0;
+let bufferReader = [];
 let file = null;
 
 function isBufferReaderEmpty() {
@@ -25,20 +26,27 @@ function readByte() {
 
 function readNBits(numberOfBits) {
   let bits = [];
-  let byte = null;
   for (let i = 0; i < numberOfBits; i++) {
     if (isBufferReaderEmpty()) {
-      byte = readByte();
+      bufferReader = readByte();
     }
-    const bit = byte.shift();
+    const bit = bufferReader.shift();
     bits.push(bit);
     numberOfAvailableBitReads--;
   }
   return bits;
 }
 
+function clearBitReader() {
+  byteOffset = 0;
+  numberOfAvailableBitReads = 0;
+  file = null;
+  bufferReader = [];
+}
+
 module.exports = {
   openFileReader,
   readByte,
   readNBits,
+  clearBitReader,
 };

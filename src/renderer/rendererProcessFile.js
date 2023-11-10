@@ -1,9 +1,10 @@
 const { createFileStatistic, writeStatisticsToFile, getFileStatistic } =
   window.electronAPI.require("../shared/fileStatistics");
 
-const { shannonFanoCoding, writeShanonFile } = window.electronAPI.require(
-  "../shared/shannonFano"
-);
+const { shannonFanoCoding, writeShanonFile, decodeShannonFile } =
+  window.electronAPI.require("../shared/shannonFano");
+
+const { clearBitReader } = window.electronAPI.require("../shared/bitReader");
 
 const { writeNBits } = window.electronAPI.require("../shared/bitWritter.js");
 
@@ -21,13 +22,12 @@ encryptButton.addEventListener("click", async () => {
     return;
   }
   try {
+    clearBitReader();
     const fileName = Date.now().toString() + "-encoded";
     const fileStatistic = await createFileStatistic(filePath);
-    console.log(fileStatistic);
-    await writeStatisticsToFile(`C:\\Personal\\${fileName}`, fileStatistic);
+    await writeStatisticsToFile(`D:\\${fileName}`, fileStatistic);
     const codes = shannonFanoCoding(fileStatistic);
-    console.log(codes);
-    await writeShanonFile(filePath, `C:\\Personal\\${fileName}`, codes);
+    await writeShanonFile(filePath, `D:\\${fileName}`, codes);
   } catch (err) {
     console.error("Error:", err);
   }
@@ -39,12 +39,11 @@ decryptButton.addEventListener("click", async () => {
     return;
   }
   try {
+    clearBitReader();
     const fileName = Date.now().toString() + "-decoded";
     const fileStatistic = await getFileStatistic(filePath);
-    console.log(fileStatistic);
     const codes = shannonFanoCoding(fileStatistic);
-    console.log(codes);
-    // decodeShannonFile(filePath, `C:\\Personal\\${fileName}`, codes);
+    await decodeShannonFile(filePath, `D:\\${fileName}`, codes);
   } catch (err) {
     console.error("Error:", err);
   }

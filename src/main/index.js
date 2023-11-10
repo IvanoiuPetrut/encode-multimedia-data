@@ -12,8 +12,8 @@ let lzwView;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1100,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, "preload.js"),
@@ -25,8 +25,8 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
 
   shannonView = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1100,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, "preload.js"),
@@ -34,8 +34,8 @@ const createWindow = () => {
   });
 
   lz77View = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1100,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, "preload.js"),

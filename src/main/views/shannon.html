@@ -8,24 +8,38 @@
   </head>
   <body>
     <h1>Shannon</h1>
-    <main>
-      <div class="custom-file-input">
-        <input
-          type="file"
-          id="fileInput"
-          name="fileInput"
-          class="hidden-input"
-        />
-        <label for="fileInput" class="custom-button">Choose a File</label>
+    <main class="grid">
+      <div class="first-col">
+        <div class="custom-file-input">
+          <input
+            type="file"
+            id="fileInput"
+            name="fileInput"
+            class="hidden-input"
+          />
+          <label for="fileInput" class="custom-button">Choose a File</label>
+        </div>
+        <div>
+          <input type="checkbox" name="showCodes" id="showCodes" />
+          <label for="showCodes">Show Codes</label>
+        </div>
+        <p class="selected-file">No selected file</p>
+        <div class="btn-group">
+          <button id="encryptButton" class="btn">Encrypt file</button>
+          <button id="decryptButton" class="btn">Decrypt file</button>
+          <textarea id="textForEncrypt" cols="30" rows="10"></textarea>
+        </div>
       </div>
-      <input type="checkbox" name="" id="" />
-
-      <p class="selected-file">No selected file</p>
-
-      <div class="btn-group">
-        <button id="encryptButton" class="btn">Encrypt file</button>
-        <button id="decryptButton" class="btn">Decrypt file</button>
-        <textarea name="" id="" cols="30" rows="10"></textarea>
+      <div class="second-col">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Code</th>
+            </tr>
+          </thead>
+          <tbody id="codesTable"></tbody>
+        </table>
       </div>
     </main>
 

@@ -1,3 +1,7 @@
+const { readFileAsBytes } = window.electronAPI.require(
+  "../shared/fileOperations"
+);
+
 const { createFileStatistic, writeStatisticsToFile, getFileStatistic } =
   window.electronAPI.require("../shared/fileStatistics");
 
@@ -18,20 +22,46 @@ let filePath = "";
 let isShowCodesChecked = false;
 
 encryptButton.addEventListener("click", async () => {
-  if (!filePath) {
+  if (!filePath && !textForEncrypt.value) {
     console.log("No file selected");
     return;
   }
   try {
     clearBitReader();
-    const fileName = Date.now().toString() + "-encoded";
-    const fileStatistic = await createFileStatistic(filePath);
-    await writeStatisticsToFile(`D:\\${fileName}`, fileStatistic);
+    let bytes = null;
+    if (textForEncrypt.value) {
+      const encoder = new TextEncoder();
+      bytes = encoder.encode(textForEncrypt.value);
+    } else {
+      bytes = await readFileAsBytes(filePath);
+    }
+
+    const fileStatistic = await createFileStatistic(bytes);
+    // await writeStatisticsToFile(`D:\\${fileName}`, fileStatistic);
+
     const codes = shannonFanoCoding(fileStatistic);
     if (isShowCodesChecked) {
       addCodesToTable(codes, codesTable);
     }
-    await writeShanonFile(filePath, `D:\\${fileName}`, codes);
+
+    let fileName = "";
+    if (textForEncrypt.value) {
+      const date = new Date();
+      fileName = `text-${date.getDate()}-${date.getMonth()}-${date.getFullYear()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.sh`;
+    } else {
+      fileName = `${filePath.split("\\")[filePath.split("\\").length - 1]}.sh`;
+    }
+
+    if (textForEncrypt.value) {
+      await writeStatisticsToFile(`D:\\${fileName}`, fileStatistic);
+      await writeShanonFile(bytes, `D:\\${fileName}`, codes);
+    } else {
+      console.log("File path: ", filePath);
+      await writeStatisticsToFile(`D:\\${fileName}`, fileStatistic);
+      await writeShanonFile(bytes, `D:\\${fileName}`, codes);
+    }
+
+    // await writeShanonFile(filePath, `D:\\${fileName}`, codes);
   } catch (err) {
     console.error("Error:", err);
   }
@@ -44,10 +74,11 @@ decryptButton.addEventListener("click", async () => {
   }
   try {
     clearBitReader();
+    const bytes = await readFileAsBytes(filePath);
     const fileName = Date.now().toString() + "-decoded";
-    const fileStatistic = await getFileStatistic(filePath);
+    const fileStatistic = await getFileStatistic(bytes);
     const codes = shannonFanoCoding(fileStatistic);
-    await decodeShannonFile(filePath, `D:\\${fileName}`, codes);
+    await decodeShannonFile(bytes, `D:\\${fileName}`, codes);
   } catch (err) {
     console.error("Error:", err);
   }

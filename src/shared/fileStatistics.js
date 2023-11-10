@@ -1,15 +1,13 @@
-const { readFileAsBytes } = require("./fileOperations");
 const { decimalToBinary } = require("./bitOperations");
 const { openFileReader, readNBits } = require("./bitReader");
 const { writeNBits } = require("./bitWritter");
 
 const STATISTIC_ENTRY_SIZE = 32;
 
-async function createFileStatistic(filePath) {
+async function createFileStatistic(bytes) {
   let fileStatistic = Array.from({ length: 256 }, () => 0);
-  const file = await readFileAsBytes(filePath);
-  for (let i = 0; i < file.length; i++) {
-    fileStatistic[file[i]]++;
+  for (let i = 0; i < bytes.length; i++) {
+    fileStatistic[bytes[i]]++;
   }
   return fileStatistic;
 }

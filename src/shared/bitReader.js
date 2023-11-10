@@ -5,17 +5,18 @@ let byteOffset = 0;
 let numberOfAvailableBitReads = 0;
 let bufferReader = [];
 let file = null;
+let readBytes = [];
 
 function isBufferReaderEmpty() {
   return numberOfAvailableBitReads === 0;
 }
 
-async function openFileReader(filePath) {
-  file = await readFileAsBytes(filePath);
+async function openFileReader(bytes) {
+  readBytes = bytes;
 }
 
 function readByte() {
-  let buffer = file[byteOffset];
+  let buffer = readBytes[byteOffset];
   buffer = byteToBits(buffer)
     .split("")
     .map((bit) => parseInt(bit));
@@ -40,7 +41,7 @@ function readNBits(numberOfBits) {
 function clearBitReader() {
   byteOffset = 0;
   numberOfAvailableBitReads = 0;
-  file = null;
+  readBytes = null;
   bufferReader = [];
 }
 

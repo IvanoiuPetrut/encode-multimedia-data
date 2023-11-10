@@ -58,8 +58,8 @@ function getCode(codes, char) {
   return codes[index].code;
 }
 
-async function writeShanonFile(filePathRead, filePathWrite, codes) {
-  await openFileReader(filePathRead);
+async function writeShanonFile(byteStream, filePathWrite, codes) {
+  await openFileReader(byteStream);
   let byte = await readNBits(8);
   byte = bitsToByte(byte);
   while (byte.length !== 0) {
@@ -77,8 +77,8 @@ function getByteFromCode(codes, code) {
   return index === -1 ? null : codes[index].char;
 }
 
-async function decodeShannonFile(filePathRead, filePathWrite, codes) {
-  await openFileReader(filePathRead);
+async function decodeShannonFile(byteStream, filePathWrite, codes) {
+  await openFileReader(byteStream);
   let bit = await readNBits(1);
   let readBuffer = [];
 

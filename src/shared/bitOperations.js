@@ -1,13 +1,6 @@
 const fs = require("fs").promises;
-const { readFileAsBytes } = require("./fileOperations");
 
-let numberOfAvailableBitReads = 0;
 const bufferOne = [];
-
-function getCode(codes, char) {
-  const index = codes.findIndex((element) => element.char === char);
-  return codes[index].code;
-}
 
 function decimalToBinary(decimal) {
   return (decimal >>> 0).toString(2);
@@ -19,32 +12,18 @@ function writeByte(filePath, buffer) {
   bufferOne.length = 0; // clear buffer
 }
 
-async function writeShanonCodes(filePathRead, filePathWrite, codes) {
-  const file = await readFileAsBytes(filePathRead);
-  for (let i = 0; i < file.length; i++) {
-    const byte = file[i];
-    const code = getCode(codes, byte);
-    writeNBits(filePathWrite, code.split(""), code.length);
+function bitsToByte(bits) {
+  if (bits.length !== 8) {
+    throw new Error("Input must be an array of 8 bits.");
   }
-  writeNBits(filePathWrite, [0, 0, 0, 0, 0, 0, 0], 7);
-  console.log("File written.");
-}
 
-function isBufferReaderEmpty() {
-  return numberOfAvailableBitReads === 0;
-}
-
-function extractBitFromLeft(byte, bitPosition) {
-  const bit = (byte >> bitPosition) & 1;
-  return bit;
+  return parseInt(bits.join(""), 2);
 }
 
 let buffer = [];
-// let index = 0;
 async function writeNBits(filePath, bits, numberOfBits) {
   bits = new Array(numberOfBits - bits.length).fill(0).concat(bits);
-  // console.log("index: ", index, "bits: ", bits);
-  // index++;
+  console.log(bits);
   for (let i = 0; i < numberOfBits; i++) {
     buffer.push(bits[i]);
     if (buffer.length === 8) {
@@ -65,9 +44,9 @@ function byteToBits(byteValue) {
 }
 
 module.exports = {
-  writeShanonCodes,
   decimalToBinary,
   writeByte,
   writeNBits,
   byteToBits,
+  bitsToByte,
 };

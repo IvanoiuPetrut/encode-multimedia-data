@@ -3,36 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <title>Mare encryptare 🔐</title>
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="assets/index.css" />
   </head>
   <body>
     <h1>Mare <strong>encryptare</strong> 🔐</h1>
-    <main>
-      <div class="custom-file-input">
-        <input
-          type="file"
-          id="fileInput"
-          name="fileInput"
-          class="hidden-input"
-        />
-        <label for="fileInput" class="custom-button">Choose a File</label>
-      </div>
-
-      <p class="selected-file">No selected file</p>
 
       <div class="btn-group">
-        <button id="encryptButton" class="btn">Encrypt file</button>
-        <button id="decryptButton" class="btn">Decrypt file</button>
-        <button id="testButton" class="btn">Test</button>
-      </div>
-
-      <div>
-        <h3>Debugger</h3>
-        <div id="fileContent"></div>
+        <a href="./views/shannon.html" class="btn">Shanon</a>
+        <a href="./views/lz77.html" class="btn">LZ77</a>
+        <a href="./views/lzw.html" class="btn">LZW</a>
       </div>
     </main>
-
-    <script src="../renderer/rendererProcessFile.js"></script>
-    <script src="../renderer/debugger.js"></script>
   </body>
 </html>

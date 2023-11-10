@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shannon</title>
+    <link rel="stylesheet" href="../assets/index.css" />
+  </head>
+  <body>
+    <h1>Shannon</h1>
+    <main>
+      <div class="custom-file-input">
+        <input
+          type="file"
+          id="fileInput"
+          name="fileInput"
+          class="hidden-input"
+        />
+        <label for="fileInput" class="custom-button">Choose a File</label>
+      </div>
+      <input type="checkbox" name="" id="" />
+
+      <p class="selected-file">No selected file</p>
+
+      <div class="btn-group">
+        <button id="encryptButton" class="btn">Encrypt file</button>
+        <button id="decryptButton" class="btn">Decrypt file</button>
+        <textarea name="" id="" cols="30" rows="10"></textarea>
+      </div>
+    </main>
+
+    <script src="../renderer/rendererShannon.js"></script>
+  </body>
+</html>

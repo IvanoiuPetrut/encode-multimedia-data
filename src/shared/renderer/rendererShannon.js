@@ -8,17 +8,23 @@ const { createFileStatistic, writeStatisticsToFile, getFileStatistic } =
 const { shannonFanoCoding, writeShanonFile, decodeShannonFile } =
   window.electronAPI.require("../shared/shannonFano");
 
-const { clearBitReader } = window.electronAPI.require("../shared/bitReader");
+const { clearBitReader } = window.electronAPI.require(
+  "../shared/bitOperations/bitReader"
+);
 
 const selectedFile = document.querySelector(".selected-file"),
   encryptButton = document.querySelector("#encryptButton"),
   decryptButton = document.querySelector("#decryptButton"),
   fileInput = document.querySelector("#fileInput"),
+  fileInputEncoded = document.querySelector("#fileInputEncoded"),
   showCodesCheckbox = document.querySelector("#showCodes"),
   codesTable = document.querySelector("#codesTable"),
   textForEncrypt = document.querySelector("#textForEncrypt");
 
 let filePath = "";
+let fileName = null;
+let fileExtension = null;
+let directoryPath = null;
 let isShowCodesChecked = false;
 
 encryptButton.addEventListener("click", async () => {
@@ -37,31 +43,27 @@ encryptButton.addEventListener("click", async () => {
     }
 
     const fileStatistic = await createFileStatistic(bytes);
-    // await writeStatisticsToFile(`D:\\${fileName}`, fileStatistic);
 
     const codes = shannonFanoCoding(fileStatistic);
     if (isShowCodesChecked) {
       addCodesToTable(codes, codesTable);
     }
 
-    let fileName = "";
-    if (textForEncrypt.value) {
-      const date = new Date();
-      fileName = `text-${date.getDate()}-${date.getMonth()}-${date.getFullYear()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}.sh`;
+    if (fileName && fileExtension && directoryPath) {
+      await writeStatisticsToFile(
+        `${directoryPath}\\${fileName}.${fileExtension}.sf`,
+        fileStatistic
+      );
+      await writeShanonFile(
+        bytes,
+        `${directoryPath}\\${fileName}.${fileExtension}.sf`,
+        codes
+      );
     } else {
-      fileName = `${filePath.split("\\")[filePath.split("\\").length - 1]}.sh`;
+      const currentDate = getCurrentDate();
+      await writeStatisticsToFile(`D:\\${currentDate}.sf`, fileStatistic);
+      await writeShanonFile(bytes, `D:\\${currentDate}.sf`, codes);
     }
-
-    if (textForEncrypt.value) {
-      await writeStatisticsToFile(`D:\\${fileName}`, fileStatistic);
-      await writeShanonFile(bytes, `D:\\${fileName}`, codes);
-    } else {
-      console.log("File path: ", filePath);
-      await writeStatisticsToFile(`D:\\${fileName}`, fileStatistic);
-      await writeShanonFile(bytes, `D:\\${fileName}`, codes);
-    }
-
-    // await writeShanonFile(filePath, `D:\\${fileName}`, codes);
   } catch (err) {
     console.error("Error:", err);
   }
@@ -75,10 +77,21 @@ decryptButton.addEventListener("click", async () => {
   try {
     clearBitReader();
     const bytes = await readFileAsBytes(filePath);
-    const fileName = Date.now().toString() + "-decoded";
     const fileStatistic = await getFileStatistic(bytes);
+
     const codes = shannonFanoCoding(fileStatistic);
-    await decodeShannonFile(bytes, `D:\\${fileName}`, codes);
+    if (isShowCodesChecked) {
+      addCodesToTable(codes, codesTable);
+    }
+
+    const date = getCurrentDate();
+    if (fileName && fileExtension && directoryPath) {
+      await decodeShannonFile(
+        bytes,
+        `${directoryPath}\\${fileName}.${fileExtension}.sf.${date}.${fileExtension}`,
+        codes
+      );
+    }
   } catch (err) {
     console.error("Error:", err);
   }
@@ -87,11 +100,19 @@ decryptButton.addEventListener("click", async () => {
 fileInput.addEventListener("change", (event) => {
   filePath = event.target.files[0].path;
   selectedFile.innerHTML = filePath;
+  [fileName, fileExtension] = getFileNameAndExtension(filePath);
+  directoryPath = getDirectoryPath(filePath);
+});
+
+fileInputEncoded.addEventListener("change", (event) => {
+  filePath = event.target.files[0].path;
+  selectedFile.innerHTML = filePath;
+  [fileName, fileExtension] = getFileNameAndExtension(filePath);
+  directoryPath = getDirectoryPath(filePath);
 });
 
 showCodesCheckbox.addEventListener("change", (event) => {
   isShowCodesChecked = event.target.checked;
-  console.log(isShowCodesChecked);
 });
 
 function addCodesToTable(codes, table) {
@@ -105,4 +126,24 @@ function addCodesToTable(codes, table) {
     row.appendChild(codeValue);
     table.appendChild(row);
   });
+}
+
+function getFileNameAndExtension(filePath) {
+  const fullFileName = filePath
+    .split("\\")
+    [filePath.split("\\").length - 1].split(".");
+  const fileName = fullFileName.shift();
+  const fileExtension = fullFileName.shift();
+  return [fileName, fileExtension];
+}
+
+function getDirectoryPath(filePath) {
+  const directoryPath = filePath.substring(0, filePath.lastIndexOf("\\"));
+  return directoryPath;
+}
+
+function getCurrentDate() {
+  const date = new Date();
+  const currentDate = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`;
+  return currentDate;
 }

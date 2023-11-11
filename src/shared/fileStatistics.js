@@ -1,6 +1,6 @@
-const { decimalToBinary } = require("./bitOperations");
-const { openFileReader, readNBits } = require("./bitReader");
-const { writeNBits } = require("./bitWritter");
+const { decimalToBinary } = require("./bitOperations/bitOperations");
+const { openFileReader, readNBits } = require("./bitOperations/bitReader");
+const { writeNBits } = require("./bitOperations/bitWritter");
 
 const STATISTIC_ENTRY_SIZE = 32;
 

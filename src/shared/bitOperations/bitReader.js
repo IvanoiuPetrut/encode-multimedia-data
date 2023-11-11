@@ -1,10 +1,8 @@
-const { readFileAsBytes } = require("./fileOperations");
 const { byteToBits } = require("./bitOperations");
 
 let byteOffset = 0;
 let numberOfAvailableBitReads = 0;
 let bufferReader = [];
-let file = null;
 let readBytes = [];
 
 function isBufferReaderEmpty() {

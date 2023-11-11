@@ -1,18 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Mare encryptare 🔐</title>
-    <link rel="stylesheet" href="assets/index.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shannon</title>
+    <link rel="stylesheet" href="./assets/index.css" />
   </head>
   <body>
-    <h1>Mare <strong>encryptare</strong> 🔐</h1>
-
-      <div class="btn-group">
-        <a href="./views/shannon.html" class="btn">Shanon</a>
-        <a href="./views/lz77.html" class="btn">LZ77</a>
-        <a href="./views/lzw.html" class="btn">LZW</a>
+    <h1>Shannon</h1>
+    <main class="grid">
+      <div class="first-col">
+        <div class="custom-file-input">
+          <input
+            type="file"
+            id="fileInput"
+            name="fileInput"
+            class="hidden-input"
+          />
+          <label for="fileInput" class="custom-button">Load file</label>
+        </div>
+        <div class="custom-file-input">
+          <input
+            type="file"
+            id="fileInputEncoded"
+            accept=".sf"
+            name="fileInputEncoded"
+            class="hidden-input"
+          />
+          <label for="fileInputEncoded" class="custom-button"
+            >Load encoded file</label
+          >
+        </div>
+        <div>
+          <input type="checkbox" name="showCodes" id="showCodes" />
+          <label for="showCodes">Show Codes</label>
+        </div>
+        <p class="selected-file">No selected file</p>
+        <div class="btn-group">
+          <button id="encryptButton" class="btn">Encrypt file</button>
+          <button id="decryptButton" class="btn">Decrypt file</button>
+          <textarea id="textForEncrypt" cols="30" rows="10"></textarea>
+        </div>
+      </div>
+      <div class="second-col">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Code</th>
+            </tr>
+          </thead>
+          <tbody id="codesTable"></tbody>
+        </table>
       </div>
     </main>
+
+    <script src="../shared/renderer/rendererShannon.js"></script>
   </body>
 </html>

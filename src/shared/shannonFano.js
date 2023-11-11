@@ -1,6 +1,6 @@
-const { writeNBits } = require("./bitWritter");
-const { readNBits, openFileReader } = require("./bitReader");
-const { bitsToByte, byteToBits } = require("./bitOperations");
+const { writeNBits } = require("./bitOperations/bitWritter");
+const { readNBits, openFileReader } = require("./bitOperations/bitReader");
+const { bitsToByte, byteToBits } = require("./bitOperations/bitOperations");
 
 class Node {
   constructor(char, frequency) {
@@ -68,7 +68,7 @@ async function writeShanonFile(byteStream, filePathWrite, codes) {
     byte = await readNBits(8);
     byte = bitsToByte(byte);
   }
-  writeNBits(filePathWrite, [0, 0, 0, 0, 0, 0, 0], 7);
+  writeNBits(filePathWrite, [0], 7);
   console.log("File written.");
 }
 

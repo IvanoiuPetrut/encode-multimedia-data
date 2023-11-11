@@ -31,5 +31,10 @@
     "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
     "electron": "26.3.0",
     "eslint": "^8.53.0"
+  },
+  "electronmon": {
+    "patterns": [
+      "!*.{sf}"
+    ]
   }
 }
